@@ -1,0 +1,4 @@
+target remote 192.163.0.130:2331
+
+allow_flash_upload
+upload
