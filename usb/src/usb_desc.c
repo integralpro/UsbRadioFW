@@ -176,7 +176,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     USB_INTERFACE_DESCRIPTOR_TYPE,				// bDescriptorType: Interface descriptor type
     0x02,										// bInterfaceNumber: Number of Interface
     0x00,										// bAlternateSetting: Alternate setting
-    0x02,										// bNumEndpoints
+    0x01,										// bNumEndpoints
     0x03,										// bInterfaceClass: HID
     0x00,										// bInterfaceSubClass : 1=BOOT, 0=no boot
     0x00,										// nInterfaceProtocol : 0=none, 1=keyboard, 2=mouse
@@ -196,15 +196,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 			EP1_IN,								// bEndpointAddress: Endpoint Address (EP1 IN)
 			0x03,								// bmAttributes: Interrupt endpoint
 			0x02, 0x00,							// wMaxPacketSize: 2 Bytes max
-			0x0A,								// bInterval: Polling Interval (10 ms)
-
-			// OUT
-			0x07,								// bLength: Endpoint Descriptor size
-			USB_ENDPOINT_DESCRIPTOR_TYPE,		// bDescriptorType:	Endpoint descriptor type
-			EP2_OUT,							// bEndpointAddress: Endpoint Address (EP2 OUT)
-			0x03,								// bmAttributes: Interrupt endpoint
-			0x02, 0x00,							// wMaxPacketSize: 2 Bytes max
-			0x01,								// bInterval: Polling Interval (1 ms)
+			0x20,								// bInterval: Polling Interval (10 ms)
 };
 
 const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
