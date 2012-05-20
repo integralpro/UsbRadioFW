@@ -50,8 +50,6 @@ void EP5_OUT_Callback(void);
 void EP6_OUT_Callback(void);
 void EP7_OUT_Callback(void);
 
-#ifndef STM32F10X_CL
-
 #ifdef CTR_CALLBACK
 void CTR_Callback(void);
 #endif
@@ -83,38 +81,6 @@ void SOF_Callback(void);
 #ifdef ESOF_CALLBACK
 void ESOF_Callback(void);
 #endif
-
-#else /* STM32F10X_CL */
-
-/* Interrupt subroutines user callbacks prototypes.
-   These callbacks are called into the respective interrupt subroutine functions
-   and can be tailored for various user application purposes.
-     Note: Make sure that the correspondent interrupt is enabled through the 
-     definition in usb_conf.h file */ 
-void INTR_MODEMISMATCH_Callback(void);
-void INTR_SOFINTR_Callback(void);
-void INTR_RXSTSQLVL_Callback(void);
-void INTR_NPTXFEMPTY_Callback(void);
-void INTR_GINNAKEFF_Callback(void);
-void INTR_GOUTNAKEFF_Callback(void);
-void INTR_ERLYSUSPEND_Callback(void);
-void INTR_USBSUSPEND_Callback(void);
-void INTR_USBRESET_Callback(void);
-void INTR_ENUMDONE_Callback(void);
-void INTR_ISOOUTDROP_Callback(void);
-void INTR_EOPFRAME_Callback(void);
-void INTR_EPMISMATCH_Callback(void);
-void INTR_INEPINTR_Callback(void);
-void INTR_OUTEPINTR_Callback(void);
-void INTR_INCOMPLISOIN_Callback(void);
-void INTR_INCOMPLISOOUT_Callback(void);
-void INTR_WKUPINTR_Callback(void);
-
-/* Isochronous data update */
-void INTR_RXSTSQLVL_ISODU_Callback(void); 
-
-#endif /* STM32F10X_CL */
-
 
 #endif /*__USB_ISTR_H*/
 

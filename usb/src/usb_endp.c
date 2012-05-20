@@ -19,10 +19,11 @@
 #include "usb_lib.h"
 #include "usb_istr.h"
 
-static __IO uint8_t Receive_Buffer[2];
+#include "leds_driver.h"
 
-void EP1_IN_Callback(void)
-{
+extern uint16_t sin_table[];
+
+void EP1_IN_Callback(void) {
 	uint8_t buffer[2];
 	buffer[0] = 1;
 	buffer[1] = 2;
@@ -31,10 +32,44 @@ void EP1_IN_Callback(void)
 	SetEPTxValid(ENDP1);
 }
 
-void EP2_OUT_Callback(void)
-{
+void EP3_IN_Callback(void) {
+	int i;
+	const int dataLen = 48 * sizeof(uint16_t);
+	static uint16_t prepareBuf0[48];
+	static uint16_t prepareBuf1[48];
+
+	static uint16_t *prepareBuf = prepareBuf0;
+
+	static int nextIndex = 0;
+	int prevIndex = nextIndex;
+
+	nextIndex = (nextIndex + 1) % 101;
+
+	uint16_t prev = sin_table[prevIndex];
+	uint16_t next = sin_table[nextIndex];
+
+	int16_t coeff = (next - prev) / 48;
+
+	for(i=0;i<48;i++) {
+		prepareBuf[i] = coeff * i + prev;
+	}
+
+	if(_GetENDPOINT(ENDP3) & EP_DTOG_RX){
+		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP3_BUF0Addr, dataLen);
+		_SetEPDblBuf0Count(ENDP3, EP_DBUF_IN, dataLen);
+	} else {
+		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP3_BUF1Addr, dataLen);
+		_SetEPDblBuf1Count(ENDP3, EP_DBUF_IN, dataLen);
+	}
+
+	_ToggleDTOG_RX(ENDP3);
+
+	prepareBuf = (prepareBuf == prepareBuf0) ? prepareBuf1 : prepareBuf0;
 }
 
-void EP3_IN_Callback(void)
-{
+void RESET_Callback(void) {
+	leds_set_mask(LED_C, LED_C);
+}
+
+void SOF_Callback(void) {
 }

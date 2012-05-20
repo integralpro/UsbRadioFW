@@ -25,7 +25,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-__IO uint8_t Send_Buffer[2];
+//__IO uint8_t Send_Buffer[2];
 //extern __IO uint8_t PrevXferComplete;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -163,5 +163,10 @@ void USB_HP_CAN1_TX_IRQHandler(void)
 //    EXTI_ClearITPendingBit(TAMPER_BUTTON_EXTI_LINE);
 //  }
 //}
+
+void TIM1_UP_IRQHandler()
+{
+
+}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

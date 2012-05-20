@@ -17,6 +17,14 @@
 #ifndef __USB_PROP_H
 #define __USB_PROP_H
 
+typedef struct
+{
+	uint8_t led1 : 2;
+	uint8_t led2 : 2;
+	uint8_t led3 : 2;
+	uint8_t reserved : 2;
+} HID_LED_REPORT;
+
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 typedef enum _HID_REQUESTS
@@ -29,6 +37,12 @@ typedef enum _HID_REQUESTS
   SET_IDLE,
   SET_PROTOCOL
 } HID_REQUESTS;
+
+typedef enum _AUDIO_REQUESTS
+{
+	GET_CUR = 0x81,
+	SET_CUR = 0x01
+} AUDIO_REQUESTS;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

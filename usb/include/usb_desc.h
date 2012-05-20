@@ -54,7 +54,7 @@
 #define AUDIO_FORMAT_TYPE_I                           0x01
 #define AUDIO_FORMAT_TYPE_III                         0x03
 
-#define USB_ENDPOINT_TYPE_ISOCHRONOUS                 0x01
+#define USB_ENDPOINT_TYPE_ISOCHRONOUS                 0x05
 #define AUDIO_ENDPOINT_GENERAL                        0x01
 
 #define HID_DESCRIPTOR_TYPE                     0x21
@@ -64,7 +64,7 @@
 
 #define CUSTOMHID_SIZ_DEVICE_DESC               0x12
 #define CUSTOMHID_SIZ_CONFIG_DESC               0x8A
-#define CUSTOMHID_SIZ_REPORT_DESC               23
+#define CUSTOMHID_SIZ_REPORT_DESC               43
 #define CUSTOMHID_SIZ_STRING_LANGID             4
 #define CUSTOMHID_SIZ_STRING_VENDOR             38
 #define CUSTOMHID_SIZ_STRING_PRODUCT            30

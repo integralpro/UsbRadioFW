@@ -51,7 +51,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
     0x09,								// bLength: Configuration Descriptor size
     USB_CONFIGURATION_DESCRIPTOR_TYPE, 	// bDescriptorType: Configuration
     CUSTOMHID_SIZ_CONFIG_DESC, 0x00, 	// Total length
-    0x03,         						// bNumInterfaces: 1 interface
+    0x03,         						// bNumInterfaces: 3 interface
     0x01,         						// bConfigurationValue: Configuration value
     0x00,         						// iConfiguration: Index of string descriptor describing the configuration
     0x80,         						// bmAttributes: Bus powered
@@ -157,7 +157,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 			0x09,								// bLength
 			USB_ENDPOINT_DESCRIPTOR_TYPE,		// bDescriptorType
 			EP3_IN,								// bEndpointAddress (EP3 IN)
-			USB_ENDPOINT_TYPE_ISOCHRONOUS,		// bmAttributes (asynchronous)
+			0x05,								// bmAttributes (asynchronous)
 			0x00, 0x02,							// wMaxPacketSize (512)
 			0x01,								// bInterval (1 millisecond)
 			0x00,								// bRefresh
@@ -196,7 +196,7 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 			EP1_IN,								// bEndpointAddress: Endpoint Address (EP1 IN)
 			0x03,								// bmAttributes: Interrupt endpoint
 			0x02, 0x00,							// wMaxPacketSize: 2 Bytes max
-			0x20,								// bInterval: Polling Interval (10 ms)
+			0x20,								// bInterval: Polling Interval (32 ms)
 };
 
 const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
@@ -204,6 +204,7 @@ const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
 		0x06, 0x00, 0xff,              // USAGE_PAGE (Vendor Defined Page 1)
 		0x09, 0x01,                    // USAGE (Vendor Usage 1)
 		0xa1, 0x01,                    // COLLECTION (Application)
+
 		0x85, 0x01,                    //   REPORT_ID (1)
 		0x09, 0x01,                    //   USAGE (Vendor Usage 1)
 		0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
@@ -211,6 +212,18 @@ const uint8_t CustomHID_ReportDescriptor[CUSTOMHID_SIZ_REPORT_DESC] =
 		0x75, 0x08,                    //   REPORT_SIZE (8)
 		0x95, 0x01,                    //   REPORT_COUNT (1)
 		0xb1, 0x82,                    //   FEATURE (Data,Var,Abs,Vol)
+
+		0x85, 0x02,                    //   REPORT_ID (2)
+		0x09, 0x02,                    //   USAGE (Vendor Usage 1)
+		0x15, 0x00,                    //   LOGICAL_MINIMUM (-1)
+		0x25, 0x02,                    //   LOGICAL_MAXIMUM (1)
+		0x75, 0x02,                    //   REPORT_SIZE (1)
+		0x95, 0x03,                    //   REPORT_COUNT (3)
+		0xb1, 0x02,                    //   FEATURE (Data,Var,Abs)
+		0x75, 0x02,                    //   REPORT_SIZE (1)
+		0x95, 0x01,                    //   REPORT_COUNT (3)
+		0xb1, 0x01,                    //   FEATURE (Data,Var,Abs)
+
 		0xc0                           // END_COLLECTION
 }; /* CustomHID_ReportDescriptor */
 
