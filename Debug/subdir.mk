@@ -9,6 +9,7 @@ C_SRCS += \
 ../leds_driver.c \
 ../main.c \
 ../si4705.c \
+../sin_table.c \
 ../stm32f10x_it.c 
 
 S_UPPER_SRCS += \
@@ -21,6 +22,7 @@ OBJS += \
 ./leds_driver.o \
 ./main.o \
 ./si4705.o \
+./sin_table.o \
 ./stm32f10x_it.o 
 
 C_DEPS += \
@@ -29,6 +31,7 @@ C_DEPS += \
 ./leds_driver.d \
 ./main.d \
 ./si4705.d \
+./sin_table.d \
 ./stm32f10x_it.d 
 
 
