@@ -157,8 +157,8 @@ const uint8_t CustomHID_ConfigDescriptor[CUSTOMHID_SIZ_CONFIG_DESC] =
 			0x09,								// bLength
 			USB_ENDPOINT_DESCRIPTOR_TYPE,		// bDescriptorType
 			EP2_IN,								// bEndpointAddress (EP3 IN)
-			0x0d,								// bmAttributes (asynchronous)
-			0x00, 0x02,							// wMaxPacketSize (512)
+			0x05,								// bmAttributes (asynchronous)
+			0x00, 0x01,							// wMaxPacketSize (512)
 			0x01,								// bInterval (1 millisecond)
 			0x00,								// bRefresh
 			0x00,								// bSyncAddress (no sync)

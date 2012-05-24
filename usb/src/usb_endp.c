@@ -31,38 +31,64 @@ void EP1_IN_Callback(void) {
 	USB_SIL_Write(EP1_IN, buffer, 2);
 	SetEPTxValid(ENDP1);
 }
+//
+//void EP2_IN_Callback(void) {
+//	int i;
+//	const int dataLen = 48 * sizeof(uint16_t);
+//	static uint16_t prepareBuf0[48];
+//	static uint16_t prepareBuf1[48];
+//
+//	static uint16_t *prepareBuf = prepareBuf0;
+//
+//	static int nextIndex = 0;
+//	int prevIndex = nextIndex;
+//
+//	nextIndex = (nextIndex + 1) % 101;
+//
+//	uint16_t prev = sin_table[prevIndex];
+//	uint16_t next = sin_table[nextIndex];
+//
+//	int16_t coeff = (next - prev) / 48;
+//
+//	for(i=0;i<48;i++) {
+//		prepareBuf[i] = coeff * i + prev;
+//	}
+//
+//	if(_GetENDPOINT(ENDP3) & EP_DTOG_RX){
+//		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF0Addr, dataLen);
+//		_SetEPDblBuf0Count(ENDP3, EP_DBUF_IN, dataLen);
+//	} else {
+//		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF1Addr, dataLen);
+//		_SetEPDblBuf1Count(ENDP3, EP_DBUF_IN, dataLen);
+//	}
+//
+//	_ToggleDTOG_RX(ENDP3);
+//
+//	prepareBuf = (prepareBuf == prepareBuf0) ? prepareBuf1 : prepareBuf0;
+//}
 
 void EP2_IN_Callback(void) {
-	int i;
-	const int dataLen = 48 * sizeof(uint16_t);
-	static uint16_t prepareBuf0[48];
-	static uint16_t prepareBuf1[48];
+	int i,j;
+	const int dataLen = 2 * 48 * sizeof(int16_t);
+	static int16_t prepareBuf0[2*48];
+	static int16_t prepareBuf1[2*48];
 
-	static uint16_t *prepareBuf = prepareBuf0;
+	static int16_t *prepareBuf = prepareBuf0;
 
-	static int nextIndex = 0;
-	int prevIndex = nextIndex;
-
-	nextIndex = (nextIndex + 1) % 101;
-
-	uint16_t prev = sin_table[prevIndex];
-	uint16_t next = sin_table[nextIndex];
-
-	int16_t coeff = (next - prev) / 48;
-
-	for(i=0;i<48;i++) {
-		prepareBuf[i] = coeff * i + prev;
+	for(j=0,i=0;i<=48;i++,j+=2) {
+		prepareBuf[j] = sin_table[i];
+		prepareBuf[j+1] = sin_table[i];
 	}
 
-	if(_GetENDPOINT(ENDP3) & EP_DTOG_RX){
+	if(_GetENDPOINT(ENDP2) & EP_DTOG_TX){
 		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF0Addr, dataLen);
-		_SetEPDblBuf0Count(ENDP3, EP_DBUF_IN, dataLen);
+		_SetEPDblBuf0Count(ENDP2, EP_DBUF_IN, dataLen);
 	} else {
 		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF1Addr, dataLen);
-		_SetEPDblBuf1Count(ENDP3, EP_DBUF_IN, dataLen);
+		_SetEPDblBuf1Count(ENDP2, EP_DBUF_IN, dataLen);
 	}
 
-	_ToggleDTOG_RX(ENDP3);
+	_ToggleDTOG_TX(ENDP2);
 
 	prepareBuf = (prepareBuf == prepareBuf0) ? prepareBuf1 : prepareBuf0;
 }
