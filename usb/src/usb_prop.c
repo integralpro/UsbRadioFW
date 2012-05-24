@@ -44,7 +44,7 @@ uint8_t *CustomHID_GetReport(uint16_t);
 uint8_t *Mute_Command(uint16_t Length);
 
 DEVICE Device_Table = {
-		2, // Number of endpoints
+		3, // Number of endpoints
 		1, // Number if configurations
 };
 
@@ -135,19 +135,21 @@ void CustomHID_Reset(void) {
 	SetEPRxValid(ENDP0);
 
 	SetEPType(ENDP1, EP_INTERRUPT);
-	SetEPTxAddr(ENDP1, ENDP1_TXADDR);
+	SetEPTxStatus(ENDP1, EP_TX_STALL);
 	SetEPRxStatus(ENDP1, EP_RX_DIS);
-	SetEPTxStatus(ENDP1, EP_TX_NAK);
+	SetEPTxAddr(ENDP1, ENDP1_TXADDR);
+	SetEPTxCount(ENDP1, 2);
+	SetEPTxValid(ENDP1);
 
-	SetEPType(ENDP3, EP_ISOCHRONOUS);
-	SetEPDoubleBuff(ENDP3);
-	SetDouBleBuffEPStall(ENDP3, EP_DBUF_IN);
-	SetEPDblBuffAddr(ENDP3, ENDP3_BUF0Addr, ENDP3_BUF1Addr);
-	SetEPDblBuffCount(ENDP3, EP_DBUF_IN, 512);
-	ClearDTOG_TX(ENDP3);
-	SetEPRxStatus(ENDP3, EP_RX_DIS);
-	SetEPTxStatus(ENDP3, EP_TX_VALID);
-	ToggleDTOG_TX(ENDP3);
+	SetEPType(ENDP2, EP_ISOCHRONOUS);
+	SetEPDoubleBuff(ENDP2);
+	SetEPDblBuffAddr(ENDP2, ENDP2_BUF0Addr, ENDP2_BUF1Addr);
+	SetEPDblBuffCount(ENDP2, EP_DBUF_IN, 512);
+	ClearDTOG_RX(ENDP2);
+	ClearDTOG_TX(ENDP2);
+	ToggleDTOG_TX(ENDP2);
+	SetEPRxStatus(ENDP2, EP_RX_DIS);
+	SetEPTxStatus(ENDP2, EP_TX_VALID);
 
 	/* Set this device to response on default address */
 	SetDeviceAddress(0);
@@ -267,11 +269,16 @@ uint8_t *CustomHID_GetHIDDescriptor(uint16_t Length) {
 
 RESULT CustomHID_Get_Interface_Setting(uint8_t Interface,
 		uint8_t AlternateSetting) {
-	if (AlternateSetting > 0) {
-		return USB_UNSUPPORT;
-	} else if (Interface > 1) {
-		return USB_UNSUPPORT;
+	switch(Interface) {
+	case 0:
+	case 2:
+		if (AlternateSetting > 0) return USB_UNSUPPORT;
+		break;
+	case 1:
+		if (AlternateSetting > 1) return USB_UNSUPPORT;
+		break;
 	}
+
 	return USB_SUCCESS;
 }
 

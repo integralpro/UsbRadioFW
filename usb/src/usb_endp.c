@@ -32,7 +32,7 @@ void EP1_IN_Callback(void) {
 	SetEPTxValid(ENDP1);
 }
 
-void EP3_IN_Callback(void) {
+void EP2_IN_Callback(void) {
 	int i;
 	const int dataLen = 48 * sizeof(uint16_t);
 	static uint16_t prepareBuf0[48];
@@ -55,10 +55,10 @@ void EP3_IN_Callback(void) {
 	}
 
 	if(_GetENDPOINT(ENDP3) & EP_DTOG_RX){
-		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP3_BUF0Addr, dataLen);
+		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF0Addr, dataLen);
 		_SetEPDblBuf0Count(ENDP3, EP_DBUF_IN, dataLen);
 	} else {
-		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP3_BUF1Addr, dataLen);
+		UserToPMABufferCopy((uint8_t *)prepareBuf, ENDP2_BUF1Addr, dataLen);
 		_SetEPDblBuf1Count(ENDP3, EP_DBUF_IN, dataLen);
 	}
 
@@ -68,7 +68,14 @@ void EP3_IN_Callback(void) {
 }
 
 void RESET_Callback(void) {
-	leds_set_mask(LED_C, LED_C);
+	static int state = 0;
+	if(state == 0) {
+		leds_set_mask(LED_C, LED_C);
+		state = 1;
+	} else {
+		leds_set_mask(0, LED_C);
+		state = 0;
+	}
 }
 
 void SOF_Callback(void) {

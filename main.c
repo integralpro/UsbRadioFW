@@ -23,8 +23,8 @@ void interrupts_config(void)
 
 	NVIC_SetPriorityGrouping(SCB_AIRCR_PRIGROUP2);
 
-	////NVIC_SetPriority(USB_HP_CAN1_TX_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 0));
-	////NVIC_EnableIRQ(USB_HP_CAN1_TX_IRQn);
+	NVIC_SetPriority(USB_HP_CAN1_TX_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 0));
+	NVIC_EnableIRQ(USB_HP_CAN1_TX_IRQn);
 
 	NVIC_SetPriority(USB_LP_CAN1_RX0_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 1));
 	NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn);
