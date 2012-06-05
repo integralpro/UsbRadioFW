@@ -34,7 +34,6 @@
 									<listOptionValue builtIn="false" value="../usb_lib/include"/>
 									<listOptionValue builtIn="false" value="../include"/>
 									<listOptionValue builtIn="false" value="../CMSIS"/>
-									<listOptionValue builtIn="false" value="../std_drivers/include"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.2049324270" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mcpu=cortex-m3 -mthumb -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.preprocessor.nostdinc.7596457" name="Do not search system directories (-nostdinc)" superClass="gnu.c.compiler.option.preprocessor.nostdinc" value="false" valueType="boolean"/>
@@ -69,23 +68,6 @@
 						</toolChain>
 					</folderInfo>
 					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.release.2015828021.689585481" name="stm32f10x_conf.h" rcbsApplicability="disable" resourcePath="CMSIS/stm32f10x_conf.h" toolsToInvoke=""/>
-					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.release.2015828021.1326921819" name="/" resourcePath="std_drivers">
-						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.exe.release.41944031" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.release" unusedChildren="">
-							<option id="cdt.managedbuild.option.gnu.cross.prefix.757823768.1648590232" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix.757823768"/>
-							<option id="cdt.managedbuild.option.gnu.cross.path.1754710406.1441288129" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path.1754710406"/>
-							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.968960155" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler.1026191784">
-								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2080082777" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
-							</tool>
-							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.1163757087" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler.392326405"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1963893480" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker.2131745856"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.100974386" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker.2128694126"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.1460617656" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver.778076737"/>
-							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.302771366" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler.2064198022">
-								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.168509499" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
-							</tool>
-						</toolChain>
-					</folderInfo>
 					<sourceEntries>
 						<entry excluding="std_drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>

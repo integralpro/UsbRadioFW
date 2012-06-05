@@ -23,8 +23,8 @@ void interrupts_config(void)
 
 	NVIC_SetPriorityGrouping(SCB_AIRCR_PRIGROUP2);
 
-	NVIC_SetPriority(USB_HP_CAN1_TX_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 0));
-	NVIC_EnableIRQ(USB_HP_CAN1_TX_IRQn);
+	//NVIC_SetPriority(USB_HP_CAN1_TX_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 0));
+	//NVIC_EnableIRQ(USB_HP_CAN1_TX_IRQn);
 
 	NVIC_SetPriority(USB_LP_CAN1_RX0_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 1, 1));
 	NVIC_EnableIRQ(USB_LP_CAN1_RX0_IRQn);
@@ -74,18 +74,21 @@ void InitAll(void) {
 }
 
 int main() {
+
 	InitAll();
 
-	//leds_set_mask(LED_C, LED_C);
+	leds_set_mask(LED_A | LED_B | LED_C, LED_A | LED_B | LED_C);
+	//delay_ms(1000);
+	//leds_set_mask(0, LED_A | LED_B | LED_C);
 
-	//uint8_t x;
-	//x = si4705_powerup();
+	uint8_t x;
+	x = si4705_powerup();
 
-	//SI4705_REV rev;
-	//x = si4705_getrev(&rev);
+	SI4705_REV rev;
+	x = si4705_getrev(&rev);
 
 	//x = si4705_seek(1);
-	//x = si4705_tune(10320);
+	x = si4705_tune(10320);
 
 	//if(x == SI4705_STATUS_OK) {
 	//	leds_set_mask(LED_C, LED_C);

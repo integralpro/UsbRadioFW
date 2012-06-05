@@ -32,7 +32,7 @@ C_DEPS += \
 usb_lib/src/%.o: ../usb_lib/src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: Cross GCC Compiler'
-	arm-none-eabi-gcc -DSTM32F10X_MD -I../usb/include -I../usb_lib/include -I../include -I../CMSIS -I../std_drivers/include -O0 -g3 -Wall -c -fmessage-length=0 -mcpu=cortex-m3 -mthumb -ffunction-sections -fdata-sections -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	arm-none-eabi-gcc -DSTM32F10X_MD -I../usb/include -I../usb_lib/include -I../include -I../CMSIS -O0 -g3 -Wall -c -fmessage-length=0 -mcpu=cortex-m3 -mthumb -ffunction-sections -fdata-sections -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

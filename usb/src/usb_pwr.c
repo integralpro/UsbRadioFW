@@ -16,11 +16,11 @@ struct
 
 static void DisconnectPin(uint8_t enable)
 {
-	gpio_set(GPIOB, 1 << 6);
+	gpio_set(GPIOB, 1 << 15);
 	if(enable) {
-		gpio_mode(GPIOB, 6, GPIO_MODE_OUT_2 | GPIO_CFGO_PUSH_PULL);
+		gpio_mode(GPIOB, 15, GPIO_MODE_OUT_2 | GPIO_CFGO_PUSH_PULL);
 	} else {
-		gpio_mode(GPIOB, 6, GPIO_MODE_OUT_2 | GPIO_CFGO_OPEN_DRAIN);
+		gpio_mode(GPIOB, 15, GPIO_MODE_OUT_2 | GPIO_CFGO_OPEN_DRAIN);
 	}
 }
 
