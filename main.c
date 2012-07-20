@@ -81,11 +81,17 @@ int main() {
 	//delay_ms(1000);
 	//leds_set_mask(0, LED_A | LED_B | LED_C);
 
+	while(bDeviceState != CONFIGURED);
+
 	uint8_t x;
-	x = si4705_powerup();
+	x = si4705_powerup(SI4705_MODE_ANALOG | SI4705_MODE_DIGITAL);
 
 	SI4705_REV rev;
 	x = si4705_getrev(&rev);
+
+	//x = si4705_setprop();
+	uint16_t freq;
+	x = si4705_getprop(SI4705_PROP_REFCLK_FREQ, &freq);
 
 	//x = si4705_seek(1);
 	x = si4705_tune(10320);
@@ -93,8 +99,6 @@ int main() {
 	//if(x == SI4705_STATUS_OK) {
 	//	leds_set_mask(LED_C, LED_C);
 	//}
-
-	while(bDeviceState != CONFIGURED);
 
 	int led = 1;
 	while(1) {

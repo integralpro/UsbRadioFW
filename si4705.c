@@ -52,7 +52,76 @@ void si4705_init() {
 	TIM2->DIER |= TIM_DIER_UIE;
 }
 
-#ifndef CONTROL_HARDWARE_SPI
+#ifdef CONTROL_HARDWARE_SPI
+
+static void si4705_send(uint8_t data[8]) {
+	uint8_t i;
+	gpio_reset(GPIOA, RF_NSEN_VAL);
+
+	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
+	SPI1->DR = 0x48;
+
+	while(!(SPI1->SR & SPI_SR_TXE));
+
+	for(i = 0; i < 8; i++) {
+		SPI1->DR = data[i];
+		while(!(SPI1->SR & SPI_SR_TXE));
+	}
+	while(SPI1->SR & SPI_SR_BSY);
+	SPI1->CR1 &= ~SPI_CR1_SPE;
+	gpio_set(GPIOA, RF_NSEN_VAL);
+}
+
+static uint8_t si4705_recv() {
+	uint8_t ret;
+	gpio_reset(GPIOA, RF_NSEN_VAL);
+
+	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
+	SPI1->DR = 0x80;
+
+	while(!(SPI1->SR & SPI_SR_TXE));
+	while(SPI1->SR & SPI_SR_BSY);
+	//SPI1->CR1 &= ~SPI_CR1_SPE;
+
+	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
+	//SPI1->CR1 |= SPI_CR1_SPE;
+
+	while(!(SPI1->SR & SPI_SR_RXNE));
+	ret = SPI1->DR;
+
+	SPI1->CR1 &= ~SPI_CR1_SPE;
+	SPI1->CR1 |= SPI_CR1_BIDIOE;
+	gpio_set(GPIOA, RF_NSEN_VAL);
+	return ret;
+}
+
+static uint8_t si4705_recv_15(uint8_t output[15]) {
+	uint8_t i;
+	uint8_t ret;
+	gpio_reset(GPIOA, RF_NSEN_VAL);
+
+	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
+	SPI1->DR = 0xC0;
+
+	while(!(SPI1->SR & SPI_SR_TXE));
+	while(SPI1->SR & SPI_SR_BSY);
+
+	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
+
+	while(!(SPI1->SR & SPI_SR_RXNE));
+	ret = SPI1->DR;
+
+	for(i=0;i<15;i++) {
+		while(!(SPI1->SR & SPI_SR_RXNE));
+		output[i] = SPI1->DR;
+	}
+
+	SPI1->CR1 &= ~SPI_CR1_SPE;
+	gpio_set(GPIOA, RF_NSEN_VAL);
+	return ret;
+}
+
+#else
 
 static void si4705_send_raw(uint8_t byte) {
 	uint8_t i;
@@ -112,7 +181,7 @@ static void si4705_send(uint8_t data[8]) {
 	gpio_set(GPIOA, RF_NSEN_VAL);
 }
 
-static uint8_t si4705_recv_1() {
+static uint8_t si4705_recv() {
 	uint8_t ret;
 	gpio_reset(GPIOA, RF_NSEN_VAL);
 
@@ -141,82 +210,13 @@ static uint8_t si4705_recv_15(uint8_t output[15]) {
 	return ret;
 }
 
-#else
-
-static void si4705_send(uint8_t data[8]) {
-	uint8_t i;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0x48;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-
-	for(i = 0; i < 8; i++) {
-		SPI1->DR = data[i];
-		while(!(SPI1->SR & SPI_SR_TXE));
-	}
-	while(SPI1->SR & SPI_SR_BSY);
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-}
-
-static uint8_t si4705_recv_1() {
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0x80;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-	while(SPI1->SR & SPI_SR_BSY);
-	//SPI1->CR1 &= ~SPI_CR1_SPE;
-
-	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
-	//SPI1->CR1 |= SPI_CR1_SPE;
-
-	while(!(SPI1->SR & SPI_SR_RXNE));
-	ret = SPI1->DR;
-
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	SPI1->CR1 |= SPI_CR1_BIDIOE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-static uint8_t si4705_recv_15(uint8_t output[15]) {
-	uint8_t i;
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0xC0;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-	while(SPI1->SR & SPI_SR_BSY);
-
-	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
-
-	while(!(SPI1->SR & SPI_SR_RXNE));
-	ret = SPI1->DR;
-
-	for(i=0;i<15;i++) {
-		while(!(SPI1->SR & SPI_SR_RXNE));
-		output[i] = SPI1->DR;
-	}
-
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-#endif // CONTROL_BIT_BANGING
+#endif // CONTROL_HARDWARE_SPI
 
 static void si4705_rclk(uint8_t enable) {
 	TIM2->CR1 |= TIM_CR1_CEN;
 }
 
-uint8_t si4705_powerup() {
+uint8_t si4705_powerup(uint8_t mode) {
 	uint8_t count;
 	gpio_mode(GPIOA, RF_GPO1, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
 	gpio_mode(GPIOA, RF_GPO2, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
@@ -234,14 +234,14 @@ uint8_t si4705_powerup() {
 	memset(powerupCmd, 0, sizeof(powerupCmd));
 	powerupCmd[0] = 0x01;
 	powerupCmd[1] = 0x00;
-	powerupCmd[2] = 0x05;
+	powerupCmd[2] = mode;
 	si4705_send(powerupCmd);
 
 	count = 11;
 	uint8_t r;
 	do {
 		count--;
-		r = si4705_recv_1();
+		r = si4705_recv();
 	} while((!(r & SI4705_STATUS_OK)) && count != 0);
 
 	if(!(r & SI4705_STATUS_OK)) {
@@ -285,7 +285,7 @@ uint8_t si4705_tune(uint16_t freq) {
 	cmd[3] = (uint8_t)(freq >> 0);
 	cmd[4] = 0x00;
 	si4705_send(cmd);
-	return si4705_recv_1();
+	return si4705_recv();
 }
 
 uint8_t si4705_seek(uint8_t up) {
@@ -300,7 +300,7 @@ uint8_t si4705_seek(uint8_t up) {
 	}
 
 	si4705_send(cmd);
-	return si4705_recv_1();
+	return si4705_recv();
 }
 
 uint8_t si4705_getprop(uint16_t prop_id, uint16_t *prop_val) {
@@ -318,11 +318,25 @@ uint8_t si4705_getprop(uint16_t prop_id, uint16_t *prop_val) {
 	ret = si4705_recv_15(cmdin);
 
 	uint16_t val = 0;
-	val |= cmd[1];
+	val |= cmdin[1];
 	val <<= 8;
-	val |= cmd[2];
+	val |= cmdin[2];
 
 	*prop_val = val;
 
 	return ret;
+}
+
+uint8_t si4705_setprop(uint16_t prop_id, uint16_t prop_val) {
+	uint8_t cmd[8];
+
+	memset(cmd, 0, sizeof(cmd));
+	cmd[0] = 0x12;
+	cmd[2] = (prop_id >> 8) & 0xFFFF;
+	cmd[3] = (prop_id >> 0) & 0xFFFF;
+	cmd[4] = (prop_val >> 8) & 0xFFFF;
+	cmd[5] = (prop_val >> 0) & 0xFFFF;
+	si4705_send(cmd);
+
+	return si4705_recv();
 }
