@@ -3,3 +3,5 @@
 *.elf
 *.hex
 *.map
+Release
+Debug
