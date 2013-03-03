@@ -4,7 +4,8 @@
  *  Created on: May 5, 2012
  *      Author: pavel_pro
  */
-#include <stm32f10x.h>
+
+#include <common.h>
 
 int16_t sin_table[] = {
 		0,

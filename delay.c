@@ -5,17 +5,18 @@
  *      Author: pavel_pro
  */
 
-#include <stm32f10x.h>
-#include <stdlib.h>
+#include <common.h>
+#include <delay.h>
 
-volatile uint32_t msTicks; /* timeTicks counter */
+/*
+volatile uint32_t msTicks; // timeTicks counter
 
 void SysTick_Handler(void) {
-	msTicks++; /* increment timeTicks counter */
+	msTicks++; // increment timeTicks counter
 }
 
 __INLINE void delay_init() {
-	if (SysTick_Config(SystemCoreClock / 1000)) /* Setup SysTick for 1 msec interrupts */
+	if (SysTick_Config(SystemCoreClock / 1000)) // Setup SysTick for 1 msec interrupts
 		exit(1);
 }
 
@@ -33,4 +34,28 @@ __INLINE void delay_us(uint32_t us) {
 		}
 	}
 }
+*/
+
+inline void delay_init() {
+	RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+}
+
+/*
+inline void delay_ms (uint16_t ms) {
+	TIM7->PSC = 0xFFFF;
+	TIM7->ARR = ms - 1;
+	TIM7->EGR = TIM_EGR_UG;
+	TIM7->SR &= ~TIM_SR_UIF;
+	TIM7->CR1 = TIM_CR1_OPM | TIM_CR1_CEN;
+	while(!(TIM7->SR & TIM_SR_UIF)) {
+		__WFI();
+	}
+	TIM7->SR &= ~TIM_SR_UIF;
+};
+
+inline void delay_us(uint16_t us) {
+
+}
+*/
+
 

@@ -5,7 +5,7 @@
  *      Author: pavel_pro
  */
 
-#include <stm32f10x.h>
+#include <common.h>
 #include <leds_driver.h>
 #include <gpio_driver.h>
 
@@ -33,6 +33,7 @@
 	}
 
 void leds_init() {
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;			// Enable clock on port B
 	gpio_mode(GPIOB, LED_A_NUM, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
 	gpio_mode(GPIOB, LED_B_NUM, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
 	gpio_mode(GPIOB, LED_C_NUM, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);

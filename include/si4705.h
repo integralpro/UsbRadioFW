@@ -18,6 +18,19 @@
 #define SI4705_PROP_DIGITAL_OUTPUT_FORMAT 0x0102
 #define SI4705_PROP_DIGITAL_OUTPUT_SAMPLE_RATE 0x0104
 
+#define SI4705_OFALL_RE (0x00)
+#define SI4705_OFALL_FE (0x80)
+#define SI4705_OMODE_I2S (0x00)
+#define SI4705_OMODE_LJ (0x30)
+#define SI4705_OMODE_MSBS (0x40)
+#define SI4705_OMODE_MSBF (0x60)
+#define SI4705_OMONO_BLEND (0x00)
+#define SI4705_OMONO_MONO (0x04)
+#define SI4705_OSIZE_8 (0x11)
+#define SI4705_OSIZE_16 (0x00)
+#define SI4705_OSIZE_20 (0x01)
+#define SI4705_OSIZE_24 (0x10)
+
 typedef struct {
 	uint8_t		pn;
 	union {

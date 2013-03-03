@@ -93,16 +93,5 @@ void EP2_IN_Callback(void) {
 	prepareBuf = (prepareBuf == prepareBuf0) ? prepareBuf1 : prepareBuf0;
 }
 
-void RESET_Callback(void) {
-	static int state = 0;
-	if(state == 0) {
-		leds_set_mask(LED_C, LED_C);
-		state = 1;
-	} else {
-		leds_set_mask(0, LED_C);
-		state = 0;
-	}
-}
-
 void SOF_Callback(void) {
 }

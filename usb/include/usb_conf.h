@@ -7,13 +7,13 @@
 #define ENDP0_TXADDR        (0x58)
 
 //#define ENDP1_RXADDR        (0x18)
-#define ENDP1_TXADDR        (0x5A)
+#define ENDP1_TXADDR        (0x98)
 
-#define ENDP2_BUF0Addr      (0x90 + 0x40 + 8)
-#define ENDP2_BUF1Addr      (0x90 + 0x40 + 8)//(0xC0+0x40)
+#define ENDP2_BUF0Addr      0x9A
+#define ENDP2_BUF1Addr      0x9A + (2 * 48 * sizeof(int16_t)) //(0xC0+0x40)
 
 #define	SOF_CALLBACK
-#define RESET_CALLBACK
+//#define RESET_CALLBACK
 
 #define IMR_MSK (CNTR_CTRM  | CNTR_WKUPM | CNTR_SUSPM | CNTR_ERRM  | CNTR_SOFM \
                  | CNTR_ESOFM | CNTR_RESETM )

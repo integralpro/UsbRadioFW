@@ -1,220 +1,30 @@
+#include <common.h>
 #include <string.h>
-
-#include <si4705_conf.h>
-#include <si4705.h>
-
-#include <leds_driver.h>
-#include <delay.h>
-#include <gpio_driver.h>
-
-#define RF_NRST_VAL (1 << RF_NRST)
-#define RF_NSEN_VAL (1 << RF_NSEN)
-#define RF_GPO1_VAL (1 << RF_GPO1)
-#define RF_GPO2_VAL (1 << RF_GPO2)
-#define RF_SDI_VAL 	(1 << RF_SDI)
-#define RF_SDO_VAL 	(1 << RF_SDO)
-#define RF_SCLK_VAL (1 << RF_SCLK)
-#define RF_RCLK_VAL (1 << RF_RCLK)
+#include <si4705_private.h>
 
 void si4705_init() {
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
 	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
 
-	// Init SPI for RF module
-#ifdef CONTROL_HARDWARE_SPI
-	RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;			// Enable clock on SPI
-
-	gpio_mode(GPIOA, RF_SCLK, GPIO_MODE_OUT_10 | GPIO_CFGO_A_PUSH_PULL);
-	gpio_mode(GPIOA, RF_SDO, GPIO_MODE_OUT_10 | GPIO_CFGO_A_PUSH_PULL);
-	SPI1->CR1 |= SPI_CR1_BR_2 | SPI_CR1_BR_1 | SPI_CR1_BR_0 | SPI_CR1_MSTR | SPI_CR1_BIDIMODE | SPI_CR1_SSM | SPI_CR1_SSI;
-#else
-	gpio_mode(GPIOA, RF_SCLK, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
-	gpio_mode(GPIOA, RF_SDO, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
-#endif // CONTROL_HARDWARE_SPI
+	si4705_control_init();
 
 	gpio_mode(GPIOA, RF_NSEN, GPIO_MODE_OUT_10 | GPIO_CFGO_PUSH_PULL);
 	gpio_set(GPIOA, RF_NSEN_VAL);
 
-	// Enable Timers
+	// Prepare Timer for the main clock
 	gpio_mode(GPIOA, RF_RCLK, GPIO_MODE_OUT_10 | GPIO_CFGO_A_PUSH_PULL);
-	TIM2->CR1 = TIM_CR1_ARPE;
-	TIM2->PSC = 8;
+	TIM2->CR1 = TIM_CR1_ARPE;								   // Enable preaload for ARR why??
+	TIM2->PSC = 9 - 1; // To get 8Mhz (72Mhz/9)
 	TIM2->ARR = 244;
 	TIM2->EGR = TIM_EGR_UG;
-	TIM2->CR2 = 0;
 
-	//TIM2->CCER &= ~(TIM_CCER_CC2E | TIM_CCER_CC2P);
 	TIM2->CCR3 = 122;
-	TIM2->CCMR2 = TIM2->CCMR2 & 0xFF00;
 	TIM2->CCMR2 |= TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1         // PWM 1
-	        	|  TIM_CCMR2_OC3PE;                            // enable preload;
-
-	TIM2->CCER |= TIM_CCER_CC3E;
-	TIM2->DIER |= TIM_DIER_UIE;
+	        	|  TIM_CCMR2_OC3PE;                            // Enable preload; why??
+	TIM2->CCER |= TIM_CCER_CC3E;							   // Enable compare channel 3
 }
 
-#ifdef CONTROL_HARDWARE_SPI
-
-static void si4705_send(uint8_t data[8]) {
-	uint8_t i;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0x48;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-
-	for(i = 0; i < 8; i++) {
-		SPI1->DR = data[i];
-		while(!(SPI1->SR & SPI_SR_TXE));
-	}
-	while(SPI1->SR & SPI_SR_BSY);
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-}
-
-static uint8_t si4705_recv() {
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0x80;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-	while(SPI1->SR & SPI_SR_BSY);
-	//SPI1->CR1 &= ~SPI_CR1_SPE;
-
-	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
-	//SPI1->CR1 |= SPI_CR1_SPE;
-
-	while(!(SPI1->SR & SPI_SR_RXNE));
-	ret = SPI1->DR;
-
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	SPI1->CR1 |= SPI_CR1_BIDIOE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-static uint8_t si4705_recv_15(uint8_t output[15]) {
-	uint8_t i;
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	SPI1->CR1 |= SPI_CR1_BIDIOE | SPI_CR1_SPE;
-	SPI1->DR = 0xC0;
-
-	while(!(SPI1->SR & SPI_SR_TXE));
-	while(SPI1->SR & SPI_SR_BSY);
-
-	SPI1->CR1 &= ~SPI_CR1_BIDIOE;
-
-	while(!(SPI1->SR & SPI_SR_RXNE));
-	ret = SPI1->DR;
-
-	for(i=0;i<15;i++) {
-		while(!(SPI1->SR & SPI_SR_RXNE));
-		output[i] = SPI1->DR;
-	}
-
-	SPI1->CR1 &= ~SPI_CR1_SPE;
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-#else
-
-static void si4705_send_raw(uint8_t byte) {
-	uint8_t i;
-
-	for(i = 0; i < 8; i++) {
-		if(byte & 0x80) {
-			gpio_set(GPIOA, RF_SDO_VAL);
-		} else {
-			gpio_reset(GPIOA, RF_SDO_VAL);
-		}
-		delay_ms(1);
-		gpio_set(GPIOA, RF_SCLK_VAL);
-		delay_ms(1);
-		gpio_reset(GPIOA, RF_SCLK_VAL);
-
-		byte <<= 1;
-	}
-	delay_ms(1);
-}
-
-static uint8_t si4705_recv_raw() {
-	uint8_t i, byte;
-
-	byte = 0;
-	gpio_mode(GPIOA, RF_SDO, GPIO_MODE_INPUT | GPIO_CFGI_FLOAT);
-	delay_ms(1);
-
-	for(i = 0; i < 8; i++) {
-		gpio_set(GPIOA, RF_SCLK_VAL);
-		delay_ms(1);
-		uint8_t val = gpio_get(GPIOA) & RF_SDO_VAL;
-		gpio_reset(GPIOA, RF_SCLK_VAL);
-		delay_ms(1);
-
-		if(val) {
-			byte |= (0x80 >> i);
-		}
-	}
-	gpio_mode(GPIOA, RF_SDO, GPIO_MODE_OUT_50 | GPIO_CFGO_PUSH_PULL);
-	delay_ms(1);
-	return byte;
-}
-
-static void si4705_send(uint8_t data[8]) {
-	uint8_t i;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	delay_ms(1);
-	si4705_send_raw(0x48);
-
-	for(i = 0; i < 8; i++) {
-		delay_ms(1);
-		si4705_send_raw(data[i]);
-	}
-
-	delay_ms(1);
-	gpio_set(GPIOA, RF_NSEN_VAL);
-}
-
-static uint8_t si4705_recv() {
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	si4705_send_raw(0x80);
-
-	ret = si4705_recv_raw();
-
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-static uint8_t si4705_recv_15(uint8_t output[15]) {
-	uint8_t i;
-	uint8_t ret;
-	gpio_reset(GPIOA, RF_NSEN_VAL);
-
-	si4705_send_raw(0xC0);
-
-	ret = si4705_recv_raw();
-
-	for(i=0;i<15;i++) {
-		output[i] = si4705_recv_raw();
-	}
-
-	gpio_set(GPIOA, RF_NSEN_VAL);
-	return ret;
-}
-
-#endif // CONTROL_HARDWARE_SPI
-
-static void si4705_rclk(uint8_t enable) {
-	TIM2->CR1 |= TIM_CR1_CEN;
-}
+#define si4705_rclk_en() (TIM2->CR1 |= TIM_CR1_CEN)
 
 uint8_t si4705_powerup(uint8_t mode) {
 	uint8_t count;
@@ -248,7 +58,7 @@ uint8_t si4705_powerup(uint8_t mode) {
 		return r;
 	}
 
-	si4705_rclk(1);
+	si4705_rclk_en();
 
 	return r;
 }

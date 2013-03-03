@@ -62,12 +62,11 @@
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.2128694126" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.778076737" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.2064198022" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.flags.1208729668" name="Assembler flags" superClass="gnu.both.asm.option.flags" value="-mcpu=cortex-m3 -mthumb -g" valueType="string"/>
+								<option id="gnu.both.asm.option.flags.1208729668" name="Assembler flags" superClass="gnu.both.asm.option.flags" value="-mcpu=cortex-m3 -mthumb -g3" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.857538180" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.release.2015828021.689585481" name="stm32f10x_conf.h" rcbsApplicability="disable" resourcePath="CMSIS/stm32f10x_conf.h" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="std_drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
@@ -100,14 +99,12 @@
 								<option id="gnu.c.compiler.option.debugging.level.1529746067" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.280229229" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_MD"/>
-									<listOptionValue builtIn="false" value="USE_STDPERIPH_DRIVER"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.975065356" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="../include"/>
 									<listOptionValue builtIn="false" value="../usb/include"/>
 									<listOptionValue builtIn="false" value="../usb_lib/include"/>
 									<listOptionValue builtIn="false" value="../CMSIS"/>
-									<listOptionValue builtIn="false" value="../std_drivers/include"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.375040948" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -mcpu=cortex-m3 -mthumb -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="gnu.c.compiler.option.preprocessor.nostdinc.1804892746" name="Do not search system directories (-nostdinc)" superClass="gnu.c.compiler.option.preprocessor.nostdinc" value="false" valueType="boolean"/>
@@ -141,7 +138,6 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.release.2015828021.1648097029.1683931628" name="stm32f10x_conf.h" rcbsApplicability="disable" resourcePath="CMSIS/stm32f10x_conf.h" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry excluding="std_drivers" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>

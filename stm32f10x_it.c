@@ -21,19 +21,9 @@
 #include <usb_istr.h>
 #include <usb_pwr.h>
 
-/* Private typedef -----------------------------------------------------------*/
-/* Private define ------------------------------------------------------------*/
-/* Private macro -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-//__IO uint8_t Send_Buffer[2];
-//extern __IO uint8_t PrevXferComplete;
-
-/* Private function prototypes -----------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
-
-/******************************************************************************/
-/*            STM32F10x Peripherals Interrupt Handlers                        */
-/******************************************************************************/
+#include <si4705_conf.h>
+#include <gpio_driver.h>
+#include <leds_driver.h>
 
 /*******************************************************************************
 * Function Name  : USB_LP_CAN1_RX0_IRQHandler
@@ -163,10 +153,5 @@ void USB_HP_CAN1_TX_IRQHandler(void)
 //    EXTI_ClearITPendingBit(TAMPER_BUTTON_EXTI_LINE);
 //  }
 //}
-
-void TIM1_UP_IRQHandler()
-{
-
-}
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
