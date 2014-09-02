@@ -33,12 +33,12 @@ S_SOURCES := crt0.S delay_low.S
 
 OBJECTS := $(C_SOURCES:%.c=%.o) $(S_SOURCES:%.S=%.o)
 
-RadioFW.elf: $(OBJECTS)
-	$(LD) $(LDFLAGS) $^ -o $@
-
 .PHONY: all
-all: RadioFW.hex	
+all: RadioFW.hex
 
 .PHONY: clean
 clean:
 	$(RM) RadioFW.elf $(OBJECTS)
+
+RadioFW.elf: $(OBJECTS)
+	$(LD) $(LDFLAGS) $^ -o $@
