@@ -29,7 +29,7 @@ C_SOURCES := $(CMSIS_SOURCES) $(USB_SOURCES) $(USB_LIB_SOURCES) \
 	crt1.c delay.c leds_driver.c main.c si4705_control.c si4705.c \
 	sin_table.c stm32f10x_it.c
 
-S_SOURCES := crt0.S delay_low.S
+S_SOURCES := crt0.S
 
 OBJECTS := $(C_SOURCES:%.c=%.o) $(S_SOURCES:%.S=%.o)
 

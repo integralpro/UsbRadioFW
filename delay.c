@@ -40,6 +40,18 @@ inline void delay_init() {
 	RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
 }
 
+inline void delay_ms (uint16_t ms) {
+	TIM4->PSC = 0xFFFF;
+	TIM4->ARR = ms;
+	TIM4->EGR = TIM_EGR_UG;
+	TIM4->SR &= ~TIM_SR_UIF;
+	TIM4->CR1 = TIM_CR1_OPM | TIM_CR1_CEN;
+	while(!(TIM4->SR & TIM_SR_UIF)) {
+ 		__WFI();
+ 	}
+	TIM4->SR &= ~TIM_SR_UIF;
+ };
+
 /*
 inline void delay_ms (uint16_t ms) {
 	TIM7->PSC = 0xFFFF;
