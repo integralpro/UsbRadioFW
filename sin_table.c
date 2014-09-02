@@ -5,7 +5,7 @@
  *      Author: pavel_pro
  */
 
-#include <common.h>
+#include <hw_config.h>
 
 int16_t sin_table[] = {
 		0,

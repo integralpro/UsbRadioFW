@@ -1,4 +1,4 @@
-#include <common.h>
+#include <hw_config.h>
 #include <si4705_private.h>
 
 void si4705_control_init() {

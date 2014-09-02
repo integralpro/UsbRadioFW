@@ -1,14 +1,14 @@
 /**
   ******************************************************************************
-  * @file    usb_sil.h
+  * @file    hw_config.h
   * @author  MCD Application Team
   * @version V4.0.0
-  * @date    28-August-2012
-  * @brief   Simplified Interface Layer function prototypes.
+  * @date    21-January-2013
+  * @brief   Hardware Configuration & Setup
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -27,21 +27,13 @@
 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USB_SIL_H
-#define __USB_SIL_H
+#ifndef __HW_CONFIG_H
+#define __HW_CONFIG_H
 
 /* Includes ------------------------------------------------------------------*/
-/* Exported types ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions ------------------------------------------------------- */
+#include <stm32f10x.h>
+#include <usb_type.h>
 
-uint32_t USB_SIL_Init(void);
-uint32_t USB_SIL_Write(uint8_t bEpAddr, uint8_t* pBufferPointer, uint32_t wBufferSize);
-uint32_t USB_SIL_Read(uint8_t bEpAddr, uint8_t* pBufferPointer);
-
-/* External variables --------------------------------------------------------*/
-
-#endif /* __USB_SIL_H */
+#endif  /*__HW_CONFIG_H*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

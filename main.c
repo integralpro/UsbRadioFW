@@ -5,7 +5,7 @@
  *      Author: pavel_pro
  */
 
-#include <common.h>
+#include <hw_config.h>
 #include <stdlib.h>
 
 #include <usb_lib.h>
