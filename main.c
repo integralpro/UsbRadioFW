@@ -119,12 +119,13 @@ int main() {
 	InitAll();
 
 	leds_set_mask(LED_A | LED_B | LED_C, LED_A | LED_B | LED_C);
-	delay_ms(500);
+	//delay_ms(500);
 	leds_set_mask(0, LED_A | LED_B | LED_C);
-	delay_ms(500);
+	//delay_ms(500);
 
 	while(bDeviceState != CONFIGURED);
 
+	/*
 	leds_set_mask(LED_A | LED_B | LED_C, LED_A | LED_B | LED_C);
 
 	uint8_t x = 0;
@@ -150,17 +151,21 @@ int main() {
 	x = si4705_tune(10320);
 
 	NVIC_EnableIRQ(TIM1_CC_IRQn);
+	*/
 
 	//if(x == SI4705_STATUS_OK) {
 	//	leds_set_mask(LED_C, LED_C);
 	//}
 
-	//int led = 1;
+	/*
 	while(1) {
-		//leds_set_mask(led?LED_A:0, LED_A);
-		//delay_ms(1000);
-		//led = (led + 1) % 2;
+		leds_set_mask(LED_A | LED_B | LED_C, LED_A | LED_B | LED_C);
+		delay_ms(500);
+		leds_set_mask(0, LED_A | LED_B | LED_C);
+		delay_ms(500);
 	}
+	*/
+	while(1);
 
 	return 0;
 }

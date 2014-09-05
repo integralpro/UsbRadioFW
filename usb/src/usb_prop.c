@@ -183,10 +183,11 @@ void CustomHID_Reset(void) {
 	SetEPType(ENDP2, EP_ISOCHRONOUS);
 	SetEPDoubleBuff(ENDP2);
 	SetEPDblBuffAddr(ENDP2, ENDP2_BUF0Addr, ENDP2_BUF1Addr);
-	SetEPDblBuffCount(ENDP2, EP_DBUF_IN, 256);
+	SetEPDblBuffCount(ENDP2, EP_DBUF_IN, 0);
+
 	ClearDTOG_RX(ENDP2);
 	ClearDTOG_TX(ENDP2);
-	ToggleDTOG_TX(ENDP2);
+	//ToggleDTOG_TX(ENDP2);
 	SetEPRxStatus(ENDP2, EP_RX_DIS);
 	SetEPTxStatus(ENDP2, EP_TX_VALID);
 
