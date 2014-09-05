@@ -12,7 +12,6 @@ CFLAGS += -DSTM32F10X_MD \
 	$(INCLUDES:%=-I%)
 
 LDFLAGS += -nostartfiles -nodefaultlibs -nostdlib -static \
-	-T./stm32f103c8.ld \
 	-Xlinker "-Map=$(BIN_DIR)/stm32f103c8.map" \
 	-Xlinker -gc-sections
 
@@ -41,8 +40,8 @@ clean:
 	$(RM) -r ./obj
 	$(RM) -r ./bin
 
-$(BIN_DIR)/RadioFW.elf: $(OBJECTS)
+$(BIN_DIR)/RadioFW.elf: $(OBJECTS) stm32f103c8.ld
 	mkdir -p $(dir $@)
-	$(LD) $(LDFLAGS) $^ -o $@
+	$(LD) $(LDFLAGS) $(OBJECTS) -Tstm32f103c8.ld -o $@
 
 -include $(C_DEPS)
